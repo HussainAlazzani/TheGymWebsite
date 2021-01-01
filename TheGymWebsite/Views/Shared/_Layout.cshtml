@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,40 +8,54 @@
     <title>@ViewData["Title"] - TheGymWebsite</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/GymStyle.css" />
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TheGymWebsite</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+    <header class="fixed-top">
+        <nav class="navbar navbar-expand-md my-navbar my-navbar-text">
+            <a asp-controller="Home" asp-action="Index">
+                <img src="~/images/GymLogoTransp.png" class="rounded-pill my-navbar-logo" alt="The Gym" />
+            </a>
+            <button class="navbar-toggler navbar-dark" data-toggle="collapse" data-target="#navbar-menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse div-navbar" id="navbar-menu">
+                <ul class="navbar-nav mr-auto offset-1">
+                    <li class="nav-item"><a asp-controller="Home" asp-action="MembershipDeals" class="nav-link my-navbar-text">Memberships</a></li>
+                    <li class="nav-item"><a asp-controller="Home" asp-action="OpenHours" class="nav-link my-navbar-text">Open Hours</a></li>
+                    <li class="nav-item"><a asp-controller="Home" asp-action="FreePass" class="nav-link my-navbar-text">Free Pass</a></li>
+                    <li class="nav-item"><a asp-controller="Home" asp-action="Vacancies" class="nav-link my-navbar-text">Vacancies</a></li>
+                    <li class="nav-item"><a asp-controller="Home" asp-action="ContactUs" class="nav-link my-navbar-text">Contact Us</a></li>
+                </ul>
+                <ul class="navbar-nav offset-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <form method="post" asp-controller="Account" asp-action="Logout">
+                                <button type="submit" class="nav-link btn btn-link pb-4 text-light">
+                                    Logout
+                                </button>
+                            </form>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+                        <li class="nav-item"><a asp-controller="Account" asp-action="RegisterMember" class="nav-link rounded btn-theme">Join NOW</a></li>
+                        <li class="nav-item"><a asp-controller="Account" asp-action="Login" class="nav-link my-navbar-text">login</a></li>
+                </ul>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container-fluid main-container m-0 p-0">
+        <main role="main" class="pb-0">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <div class="footer text-muted bg-dark">
         <div class="container">
-            &copy; 2020 - TheGymWebsite - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2019 - The Gym - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </div>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
