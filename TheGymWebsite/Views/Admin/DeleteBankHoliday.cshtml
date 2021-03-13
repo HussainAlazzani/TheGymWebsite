@@ -1,0 +1,79 @@
+﻿@model List<TheGymWebsite.ViewModels.OpenHoursViewModel>
+
+@{
+    ViewData["Title"] = "Delete Bank Holiday";
+}
+
+@if (Model.Any())
+{
+    <form method="post" asp-controller="Admin" asp-action="DeleteBankHoliday">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="font-weight-bold">Bank holidays</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="pb-3">Select the holidays to delete:</h5>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><input class="check" type="checkbox" id="selectAll" autocomplete="off"></th>
+                            <th>Date</th>
+                            <th>Day</th>
+                            <th>Opening</th>
+                            <th>Closing</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input asp-for="@Model[i].Id" type="hidden" />
+                                    <input class="check" asp-for="@Model[i].IsChecked" type="checkbox"/>
+                                </td>
+                                <td><label asp-for="@Model[i].Date">@Model[i].Date.ToShortDateString()</label></td>
+                                <td><label asp-for="@Model[i].DayName">@Model[i].DayName</label></td>
+                                <td><label asp-for="@Model[i].OpenTime">@Model[i].OpenTime.ToString(@"hh\:mm")</label></td>
+                                <td><label asp-for="@Model[i].CloseTime">@Model[i].CloseTime.ToString(@"hh\:mm")</label></td>
+                                <td><label asp-for="@Model[i].Note">@Model[i].Note</label></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+            <div class="card-footer">
+                <div class="form-inline">
+                    <button type="submit" class="btn btn-outline-danger mr-3"
+                            onclick="return confirm('This operation will delete the selected holiday(s). Do you want to continue?');">
+                    &#8722; Remove holiday</button>
+                    <a asp-action="OpenHours" asp-controller="Home" class="btn btn-outline-dark ml-3">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <h3>No bank holidays listed</h3>
+}
+<br />
+<br />
+<br />
+
+<script type="text/javascript">
+
+    const mainCheckbox = document.getElementById("selectAll");
+    mainCheckbox.addEventListener("click", () => {
+        const checkboxInputs = document.getElementsByClassName("check");
+
+        for (let i = 1; i < checkboxInputs.length; i++) {
+            checkboxInputs[i].checked = checkboxInputs[0].checked;
+            console.log(i);
+        }
+    });
+
+</script>

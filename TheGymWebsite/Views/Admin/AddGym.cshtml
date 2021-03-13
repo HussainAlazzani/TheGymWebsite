@@ -1,0 +1,45 @@
+﻿@model TheGymWebsite.ViewModels.GymViewModel
+
+@{
+    ViewData["Title"] = "Add New Gym";
+}
+
+<div class="container p-3">
+    <form asp-action="AddGym" method="post">
+        <div class="form-group col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <label asp-for="GymName"></label>
+            <input asp-for="GymName" class="form-control" />
+        </div>
+        <div class="form-group col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="form-group col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <label asp-for="AddressLineOne"></label>
+            <input asp-for="AddressLineOne" class="form-control" />
+        </div>
+        <div class="form-group col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <label asp-for="AddressLineTwo"></label>
+            <input asp-for="AddressLineTwo" class="form-control" />
+        </div>
+        <div class="form-group col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <label asp-for="Town"></label>
+            <input asp-for="Town" class="form-control" />
+        </div>
+        <div class="form-group col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <label asp-for="Postcode"></label>
+            <input asp-for="Postcode" class="form-control" />
+        </div>
+        <div class="form-group col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <label asp-for="Telephone"></label>
+            <input asp-for="Telephone" class="form-control" />
+        </div>
+
+        <div class="form-inline col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 mt-3 mb-3 justify-content-between">
+            <button type="submit" class="btn btn-outline-success btn-submit">&#43; Add gym</button>
+            <a asp-action="ListGyms" asp-controller="Admin" class="btn btn-dark btn-cancel">Cancel</a>
+        </div>
+        <br />
+        <br />
+    </form>
+</div>

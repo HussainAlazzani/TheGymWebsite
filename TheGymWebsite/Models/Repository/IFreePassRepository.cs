@@ -8,6 +8,7 @@ namespace TheGymWebsite.Models.Repository
     public interface IFreePassRepository
     {
         FreePass GetFreePass(int id);
+        public int GetFreePassIdFromEmail(string email);
         IEnumerable<FreePass> GetFreePasses();
         void Add(FreePass freePass);
         void Update(FreePass changedFreePass);

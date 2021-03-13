@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService
+
+@model IEnumerable<Gym>
+
+@{
+    ViewData["Title"] = "Gym List";
+}
+
+<div class="p-3">
+    <h3>List of gyms</h3>
+    <a class="btn btn-outline-success mt-2 mb-3" asp-action="AddGym" asp-controller="Admin">&#43; Add new gym</a>
+    <br />
+    @if (Model.Any())
+    {
+        @foreach (var gym in Model)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="font-weight-bold">@gym.Id&#46; @gym.GymName</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="pl-3 list-unstyled">
+                        <li>@gym.AddressLineOne</li>
+                        <li>@gym.AddressLineTwo</li>
+                        <li>@gym.Town</li>
+                        <li>@gym.Postcode</li>
+                        <li><br /></li>
+                        <li><b>Email:</b> @gym.Email</li>
+                        <li><b>Tel:</b> @gym.Telephone</li>
+                    </ul>
+                    <div class="row form-inline ml-3">
+                        <a asp-action="EditGym" asp-controller="Admin" asp-route-id="@gym.Id"
+                           class="view pr-3" title="Edit this gym" data-toggle="tooltip">
+                            <i class="fas fa-edit fa-2x text-warning"></i>
+                        </a>
+                        <form method="post" asp-action="DeleteGym" asp-route-id="@gym.Id">
+                            @if (gym.Id != 1)
+                            {
+                                <button type="submit" title="Delete this gym" data-toggle="tooltip" class="btn"
+                                        onclick="return confirm('Are you sure you want to delete this gym?');">
+                                    <i class="fas fa-trash-alt fa-2x text-danger"></i>
+                                </button>
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <br />
+        }
+    }
+    else
+    {
+        <p>There are no gyms in the system.</p>
+    }
+</div>
+

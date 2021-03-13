@@ -1,0 +1,40 @@
+﻿@model TheGymWebsite.ViewModels.LoginViewModel
+
+@{
+    ViewBag.Title = "Member Login";
+}
+
+<div class="container-fluid gym-background min-vh-100">
+    <div class="p-4 offset-sm-0 offset-md-1">
+        <h2>User Login</h2>
+        <div class="row">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+                <form method="post">
+                    @*<div asp-validation-summary="All" class="text-danger"></div>*@
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group row justify-content-between pl-3 pr-3">
+                        <div class="checkbox">
+                            <label asp-for="RememberMe">
+                                <input asp-for="RememberMe" />
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <a asp-action="ForgotPassword" asp-controller="Account" class="password">Forgot password?</a>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-theme btn-submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@model IEnumerable<RoleViewModel>
+@inject IAuthorizationService authorizationService
+
+@{
+    ViewBag.Title = "List of Roles";
+}
+
+<div class="p-3">
+    <h3>List of roles</h3>
+    <a class="btn btn-outline-success mt-2 mb-3" style="width:auto" asp-action="CreateRole" asp-controller="Role">&#43; Add new role</a>
+    <br />
+    @if (Model.Any())
+    {
+        @foreach (var role in Model.OrderByDescending(r => r.RoleClaims.Count))
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="font-weight-bold">@role.Name</h4>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">Claims associated with this role:</h6>
+                    <ol class="pl-3">
+                        @foreach (var claim in role.RoleClaims)
+                        {
+                            <li>@claim.ClaimType</li>
+                        }
+                    </ol>
+                    <div class="row form-inline">
+                        <a asp-action="UsersInRole" asp-controller="Role" asp-route-id="@role.Id"
+                           class="view pl-3 pr-3" title="View users assigned to this role" data-toggle="tooltip">
+                            <i class="fas fa-users fa-2x text-info"></i>
+                        </a>
+                        @*Cannot edit or delete the Admin role*@
+                        @if (role.Name != "Admin")
+                        {
+                            <a asp-action="EditRole" asp-controller="Role" asp-route-id="@role.Id"
+                               class="view pr-3" title="Edit this role" data-toggle="tooltip">
+                                <i class="fas fa-edit fa-2x text-warning"></i>
+                            </a>
+                            <form method="post" asp-action="DeleteRole" asp-route-id="@role.Id">
+                                <button type="submit" title="Delete this role" data-toggle="tooltip" class="btn"
+                                        onclick="return confirm('Are you sure you want to delete this role?');">
+                                    <i class="fas fa-trash-alt fa-2x text-danger"></i>
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+            <br />
+        }
+    }
+    else
+    {
+        <p>There are no roles in the system.</p>
+    }
+</div>
+

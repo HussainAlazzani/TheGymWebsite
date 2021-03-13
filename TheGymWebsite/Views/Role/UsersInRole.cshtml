@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ApplicationUser>
+
+@{
+    ViewBag.Title = "Users in " + @ViewBag.RoleName + " Role";
+}
+
+<div class="container">
+    <br />
+
+    <div class="card">
+        <div class="card-header form-inline">
+            <h3 class="font-weight-bold mr-5">@ViewBag.RoleName</h3>
+            <a class="btn btn-outline-success" asp-controller="Role" asp-action="AddUsersToRole" asp-route-roleName="@ViewBag.RoleName">&#43; Add Users</a>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <ol class="pl-3">
+                    @foreach (var user in Model.OrderBy(x => x.FirstName))
+                    {
+                        <li>
+                            @user.FirstName @user.LastName
+                            <form asp-controller="Role" asp-action="RemoveUserFromRole" asp-route-userId="@user.Id" asp-route-roleName="@ViewBag.RoleName" method="post" style="display:inline;">
+                                <button type="submit" title="Remove user from this role" data-toggle="tooltip" class="btn">
+                                    <i class="fas fa-user-times text-danger"></i>
+                                </button>
+                            </form>
+                        </li>
+                    }
+                </ol>
+            }
+            else
+            {
+                <h5>No users in this role.</h5>
+            }
+        </div>
+    </div>
+    <br />
+    <a class="btn btn-outline-info" asp-controller="Role" asp-action="ListRoles">Return to roles list</a>
+
+</div>

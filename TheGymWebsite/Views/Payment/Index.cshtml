@@ -1,0 +1,100 @@
+﻿@model IEnumerable<MembershipDeal>
+
+@{
+    ViewData["Title"] = "Membership Deals";
+}
+@*<div class="p-4 offset-sm-0 offset-md-1">
+    @if (Model.Any() == false)
+    {
+        <h6>Please visit the gym to choose a membership</h6>
+    }
+    else
+    {
+        <h4>Choose your membership:</h4>
+
+        @foreach (var deal in Model.OrderBy(x => x.Duration))
+        {
+            int priceTwoDecimals = (int)deal.Price * 100;
+            string description = Enums.GetDisplayName(deal.Duration) + " membership";
+
+            <h6>@Enums.GetDisplayName(deal.Duration)</h6>
+            <div>
+                <form asp-action="Processing" asp-controller="Payment" asp-route-amount="@priceTwoDecimals" asp-route-membershipDuration="@deal.Duration" method="POST">
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="pk_test_pon61mA6ahpVdW3Tyf6SXkpt00AgCaajuI"
+                            data-amount="@priceTwoDecimals"
+                            data-name="TheSuperMan"
+                            data-description="@description"
+                            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                            data-locale="en"
+                            data-label="Pay £@deal.Price">
+                    </script>
+                </form>
+            </div>
+            <br />
+        }
+    }
+</div>*@
+
+<div class="container-fluid gym-background min-vh-100">
+    <div class="row">
+        <div class="col-12 p-3">
+            <h3 class="p-3 text-center">Select your membership</h3>
+        </div>
+    </div>
+
+    @if (Model.Any() == false)
+    {
+        <div class="p-3">
+            <h6>Please visit the gym to choose a membership</h6>
+        </div>
+    }
+    else
+    {
+        <div class="row justify-content-center p-0 m-0">
+            @foreach (var deal in Model.OrderBy(d => d.Duration))
+            {
+                int priceTwoDecimals = (int)deal.Price * 100;
+                string description = Enums.GetDisplayName(deal.Duration) + " membership";
+
+                <div class="col-auto price-box rounded p-0 m-1">
+
+                    <br />
+                    <div class="membership-period">
+                        @Enums.GetDisplayName(deal.Duration)
+                    </div>
+                    <br />
+                    <div class="membership-price">
+                        £@deal.Price.ToString("N0")
+                    </div>
+                    <br />
+                    <div class="price-posttext">
+                        NO CONTRACT
+                    </div>
+                    <div class="price-posttext">
+                        NO JOINING FEE
+                    </div>
+                    <br />
+                    <div class="form-inline justify-content-center">
+                        <form asp-action="Processing" asp-controller="Payment" asp-route-amount="@priceTwoDecimals" asp-route-membershipDuration="@deal.Duration" method="POST">
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                    data-key="pk_test_pon61mA6ahpVdW3Tyf6SXkpt00AgCaajuI"
+                                    data-amount="@priceTwoDecimals"
+                                    data-name="TheSuperMan"
+                                    data-description="@description"
+                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                    data-locale="en"
+                                    data-label="&nbsp;&nbsp;&nbsp;&nbsp;Select&nbsp;&nbsp;&nbsp;&nbsp;">
+                            </script>
+                        </form>
+                    </div>
+                    <br />
+                </div>
+
+            }
+        </div>
+    }
+    <br />
+    <br />
+</div>
+

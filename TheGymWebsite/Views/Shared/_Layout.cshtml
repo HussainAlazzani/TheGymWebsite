@@ -1,4 +1,7 @@
-﻿
+﻿@inject SignInManager<ApplicationUser> signInManager;
+
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +12,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/GymStyle.css" />
-
 </head>
 <body>
 
@@ -30,6 +32,24 @@
                     <li class="nav-item"><a asp-controller="Home" asp-action="ContactUs" class="nav-link my-navbar-text">Contact Us</a></li>
                 </ul>
                 <ul class="navbar-nav offset-1">
+                    @*If the user is signed-in display Logout link*@
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        // Display link to Users page users who are permitted to view the list of users.
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "CanViewUsers")).Succeeded)
+                        {
+                            <li class="nav-item"><a asp-controller="Admin" asp-action="UserList" class="nav-link my-navbar-text">Users</a></li>
+                        }
+                        // Display link to the roles page to users who are permitted to manage roles
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "ManageRolesPermission")).Succeeded)
+                        {
+                            <li class="nav-item"><a asp-controller="Role" asp-action="Index" class="nav-link my-navbar-text">Roles</a></li>
+                        }
+                        // Do not display member page for users under the required age.
+                        if ((await AuthorizationService.AuthorizeAsync(User, "MinimumAge16")).Succeeded)
+                        {
+                            <li class="nav-item"><a asp-controller="Member" asp-action="Index" class="nav-link my-navbar-text pr-3">My Page</a></li>
+                        }
                         <li class="nav-item">
                             <form method="post" asp-controller="Account" asp-action="Logout">
                                 <button type="submit" class="nav-link btn btn-link pb-4 text-light">
@@ -37,8 +57,12 @@
                                 </button>
                             </form>
                         </li>
+                    }
+                    else
+                    {
                         <li class="nav-item"><a asp-controller="Account" asp-action="RegisterMember" class="nav-link rounded btn-theme">Join NOW</a></li>
                         <li class="nav-item"><a asp-controller="Account" asp-action="Login" class="nav-link my-navbar-text">login</a></li>
+                    }
                 </ul>
             </div>
         </nav>
@@ -56,9 +80,11 @@
     </div>
 
 
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://kit.fontawesome.com/547c217ebf.js" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,50 @@
+﻿@model ApplicationUser
+
+@inject SignInManager<ApplicationUser> signInManager
+
+@{
+    ViewData["Title"] = "Member Details";
+}
+<div class="container-fluid gym-background min-vh-100">
+    <div class="p-3 p-sm-5 offset-md-1">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <h3 class="font-weight-bold pb-3">Account details</h3>
+                <dl>
+                    <dt>Name:</dt>
+                    <dd>@Model.FirstName @Model.LastName</dd>
+                    <dt>Date Of Birth:</dt>
+                    <dd>@Model.DateOfBirth.ToShortDateString()</dd>
+                    <dt>Gender:</dt>
+                    <dd>@Model.Gender</dd>
+                </dl>
+            </div>
+            <div class="col-12 col-md-6">
+                <h3 class="font-weight-bold pb-3">Contact details</h3>
+                <dl>
+                    <dt>Email:</dt>
+                    <dd>@Model.Email</dd>
+                    <dt>Phone number:</dt>
+                    <dd>@Model.PhoneNumber</dd>
+                    <dt>Address:</dt>
+                    <dd>@Model.AddressLineOne</dd>
+                    <dd>@Model.AddressLineTwo</dd>
+                    <dd>@Model.Town</dd>
+                    <dd>@Model.Postcode</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <a asp-action="EditUserDetails" asp-controller="Account" asp-route-email="@Model.Email" class="btn btn-outline-warning m-1 ml-2">Edit your details</a>
+        </div>
+        <div class="row">
+            <a asp-action="EditUserPassword" asp-controller="Account" asp-route-email="@Model.Email" class="btn btn-outline-warning m-1 ml-2">Change your password</a>
+        </div>
+        <br />
+        <div>
+
+        </div>
+        <br />
+        <br />
+    </div>
+</div>

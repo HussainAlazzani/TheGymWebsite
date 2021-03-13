@@ -1,0 +1,91 @@
+﻿@model EditUserRolesViewModel
+
+@{
+    ViewData["Title"] = "Add user to or remove from role";
+}
+
+
+<div class="card mb-3">
+    <div class="card-header font-weight-bold">
+        <div class="container">
+            <div class="row">
+                <div class="col-auto">
+                    @Model.UserName
+                    <br />
+                    @Model.Email
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-auto">
+                    <b>Roles in:</b>
+                </div>
+            </div>
+        </div>
+        @for (int i = 0; i < Model.Roles.Count; i++)
+        {
+            if (Model.IsInRole[i])
+            {
+                <form method="post" asp-action="RemoveUserFromRole" asp-controller="Account">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-6 col-sm-5 col-md-3">
+                                <input asp-for="@Model.UserId" type="hidden" />
+                                <label asp-for="@Model.Roles[i]" class="d-table-cell">@Model.Roles[i]</label>
+                            </div>
+                            <div class="col-6 col-md-5">
+                                <input asp-for="RoleName" type="hidden" value="@Model.Roles[i]" />
+                                <button type="submit" class="page-link d-table-cell text-danger" style="width:90px;">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            }
+        }
+        <br />
+        <div class="container">
+            <div class="row">
+                <div class="col-auto">
+                    <b>Roles not in:</b>
+                </div>
+            </div>
+        </div>
+        @for (int i = 0; i < Model.Roles.Count; i++)
+        {
+            if (Model.IsInRole[i] == false)
+            {
+                <form method="post" asp-action="AddUserToRole" asp-controller="Account">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-6 col-sm-5 col-md-3">
+                                <input asp-for="@Model.UserId" type="hidden" />
+                                <label asp-for="@Model.Roles[i]" class="d-table-cell">@Model.Roles[i]</label>
+                            </div>
+                            <div class="col-6 col-md-5">
+                                <input asp-for="RoleName" type="hidden" value="@Model.Roles[i]" />
+                                <button type="submit" class="page-link d-table-cell text-success" style="width:90px;">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            }
+        }
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+    <div class="card-footer">
+        @*<a asp-action="ListUsers" asp-controller="Account" class="btn btn-info">View users in account</a>*@
+        <div class="container">
+            <div class="row">
+                <div class="col-3">
+                    <a asp-action="UserProfile" asp-controller="Admin" asp-route-email="@Model.Email"
+                       class="view" title="Return to user profile" data-toggle="tooltip">
+                        <i class="fas fa-arrow-circle-left fa-2x text-success"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

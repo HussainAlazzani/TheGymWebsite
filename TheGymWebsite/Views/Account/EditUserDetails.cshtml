@@ -1,0 +1,144 @@
+﻿@model TheGymWebsite.ViewModels.EditUserDetailsViewModel
+
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+
+@{
+    ViewData["Title"] = "Edit User Details";
+}
+<div class="container-fluid gym-background min-vh-100">
+    <div class="p-3">
+        <form method="post" asp-action="EditUserDetails" asp-controller="Account" asp-route-returnUrl="@ViewBag.ReturnUrl">
+            @if (Model.Email == User.Identity.Name)
+            {
+                <a asp-action="EditUserPassword" asp-controller="Account" asp-route-email="@Model.Email" class="btn btn-outline-warning">Change your password</a>
+                <br />
+                <br />
+            }
+            <div class="form-row" style="min-width:600px;">
+                <div class="col-3">
+                    <input asp-for="Email" type="hidden" />
+                    <label asp-for="Title" class="control-label required"></label>
+                    <select asp-for="Title" class="form-control"
+                            asp-items="Html.GetEnumSelectList<Enums.Title>()">
+                    </select>
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12 col-sm-9 col-md-6">
+                    <label asp-for="FirstName" class="control-label required"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12 col-sm-9 col-md-6">
+                    <label asp-for="LastName" class="control-label required"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-auto">
+                    <label class="required">Date of Birth</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <span asp-validation-for="DayOfBirth" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row" style="min-width:550px;">
+                <div class="col-2">
+                    <select asp-for="DayOfBirth" class="form-control w-100">
+                        @for (int i = 1; i <= 31; i++)
+                        {
+                            <option>@i</option>
+                        }
+                    </select>
+                    <span asp-validation-for="DayOfBirth" class="text-danger"></span>
+                </div>
+                <div class="col-2">
+                    <select asp-for="MonthOfBirth" class="form-control w-100">
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                            <option>@i</option>
+                        }
+                    </select>
+                    <span asp-validation-for="MonthOfBirth" class="text-danger"></span>
+                </div>
+                <div class="col-2">
+                    <select asp-for="YearOfBirth" class="form-control w-100">
+                        @for (int i = Convert.ToInt32(DateTime.Now.Year); i >= 1900; i--)
+                        {
+                            <option>@i</option>
+                        }
+                    </select>
+                    <span asp-validation-for="YearOfBirth" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="form-row" style="min-width:600px;">
+                <div class="col-3">
+                    <label asp-for="Gender" class="control-label required"></label>
+                    <select asp-for="Gender" class="form-control"
+                            asp-items="Html.GetEnumSelectList<Enums.Gender>()">
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="form-row">
+                <div class="col-12 col-sm-9 col-md-6">
+                    <label asp-for="PhoneNumber" class="control-label required"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="form-row">
+                <div class="col-12 col-sm-9 col-md-6">
+                    <label asp-for="AddressLineOne" class="control-label required"></label>
+                    <input asp-for="AddressLineOne" class="form-control" />
+                    <span asp-validation-for="AddressLineOne" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12 col-sm-9 col-md-6">
+                    <label asp-for="AddressLineTwo" class="control-label"></label>
+                    <input asp-for="AddressLineTwo" class="form-control" />
+                    <span asp-validation-for="AddressLineTwo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12 col-sm-9 col-md-6">
+                    <label asp-for="Town" class="control-label required"></label>
+                    <input asp-for="Town" class="form-control" />
+                    <span asp-validation-for="Town" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12 col-sm-9 col-md-6">
+                    <label asp-for="Postcode" class="control-label required"></label>
+                    <input asp-for="Postcode" class="form-control" />
+                    <span asp-validation-for="Postcode" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="form-inline col-12 col-sm-9 col-md-6 m-0 p-0 mt-3 mb-3 justify-content-between">
+                <button type="submit" class="btn-theme btn-submit">Submit</button>
+                @if ((await AuthorizationService.AuthorizeAsync(User, "ManageUsersPermission")).Succeeded)
+                {
+                    <a asp-action="UserProfile" asp-controller="Admin" asp-route-email="@Model.Email" class="btn btn-dark btn-cancel">Cancel</a>
+                }
+                else
+                {
+                    <a asp-action="Index" asp-controller="Member" class="btn btn-dark btn-cancel">Cancel</a>
+                }
+            </div>
+        </form>
+    </div>
+</div>

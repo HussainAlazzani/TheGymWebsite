@@ -12,5 +12,6 @@ namespace TheGymWebsite.Models.Repository
         void Add(MembershipDeal membershipDeal);
         void Update(MembershipDeal changedMembershipDeal);
         void Delete(int id);
+        bool IsDurationOffered(Enums.MembershipDuration duration);
     }
 }

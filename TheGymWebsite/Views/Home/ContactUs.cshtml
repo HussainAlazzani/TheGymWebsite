@@ -1,0 +1,63 @@
+﻿@model TheGymWebsite.ViewModels.ContactUsViewModel
+
+<div class="container-fluid gym-background">
+    <form asp-action="ContactUs" method="post">
+        <div class="container p-4">
+            <div class="row justify-content-between">
+                <div class="col-12 col-md-6">
+                    <p>
+                        <b>Contact Us</b>
+                        <br />@Model.GymName
+                        <br>@Model.GymAddressLineOne
+                        <br>@Model.GymAddressLineTwo
+                        <br>@Model.GymTown
+                        <br>@Model.GymPostCode
+                        <br />
+                        <br />
+                        <b>Telephone</b>
+                        <br />@Model.GymTelephone
+                        <br />
+                        <br />
+                        <b>Email</b>
+                        <br />@Model.GymEmail
+                    </p>
+                </div>
+                @* Information to be posted. *@
+                <input asp-for="GymId" type="hidden" />
+                <input asp-for="GymName" type="hidden" />
+                <input asp-for="GymEmail" type="hidden" />
+                <input asp-for="GymTelephone" type="hidden" />
+                <input asp-for="GymAddressLineOne" type="hidden" />
+                <input asp-for="GymAddressLineTwo" type="hidden" />
+                <input asp-for="GymTown" type="hidden" />
+                <input asp-for="GymPostCode" type="hidden" />
+
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Subject"></label>
+                        <input asp-for="Subject" class="form-control" />
+                        <span asp-validation-for="Subject" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Message"></label>
+                        <textarea asp-for="Message" rows="5" cols="15" class="form-control"></textarea>
+                        <span asp-validation-for="Message" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn-theme btn-submit">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

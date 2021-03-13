@@ -1,0 +1,176 @@
+﻿@model List<UserListViewModel>
+
+@{
+    ViewBag.Title = "UserList";
+    int count = 1;
+}
+
+
+<div class="p-0 p-sm-1 p-md-2 p-lg-4" id="table-container">
+    <table class="table table-striped table-hover" id="table">
+        <thead>
+            <tr style="border-top:hidden; background-color:lightgray;">
+                <th></th>
+                <th>
+                    <input class="form-control" type="text" id="name-search-input" placeholder="Search by name..." title="Type in the user name">
+                </th>
+                <th>
+                    <input class="form-control" type="text" id="email-search-input" placeholder="Search by email..." title="Type in the user email">
+                </th>
+                <th>
+                    <select class="form-control" id="status-filter">
+                        <option value="">All</option>
+                        <option value="A">Active</option>
+                        <option value="I">Inactive</option>
+                    </select>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Membership</th>
+                <th>Expiry</th>
+                <th>Sign in</th>
+            </tr>
+        </thead>
+
+        @if (Model.Any())
+        {
+            <tbody>
+                @foreach (var user in Model.OrderBy(x => x.FirstName))
+                {
+
+                    <tr>
+                        <td>@(count++)</td>
+                        <td>
+                            <a asp-action="UserProfile" asp-controller="Admin" asp-route-email="@user.Email"
+                               data-toggle="tooltip" data-placement="bottom" title="View details">@user.FirstName @user.LastName</a>
+                        </td>
+                        <td>@user.Email</td>
+                        @if (user.IsMembershipActive)
+                        {
+                            <td><span class="text-success badge badge-pill badge-success ml-2">.</span>  Active</td>
+                            <td>@user.MembershipExpiration</td>
+                        }
+                        else
+                        {
+                            <td><span class="text-danger badge badge-pill badge-danger ml-2">.</span>  Inactive</td>
+                            <td></td>
+                        }
+                    <td class="form-inline">
+                        @if (user.IsMembershipActive)
+                        {
+                            <form method="post" asp-action="GymSignIn" asp-controller="Admin" asp-route-id="@user.Id">
+                                <button type="submit" title="Sign the member in" data-toggle="tooltip" class="btn">
+                                    <i class="fas fa-sign-in-alt text-success"></i>
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <button title="Membership activation required" data-toggle="tooltip" class="btn" disabled>
+                                <i class="fas fa-sign-in-alt text-dark"></i>
+                            </button>
+                        }
+                    </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            <tr>
+                No users.
+            </tr>
+        }
+
+    </table>
+</div>
+
+@*
+    This script performs a search on the table based on user names and their emails.
+*@
+<script type="text/javascript">
+
+    // Search by user emails.
+    const emailSearchInput = document.getElementById("email-search-input");
+    emailSearchInput.addEventListener("keyup", (e) => {
+        let emailSearchTerm = e.target.value.toUpperCase();
+
+        const table = document.getElementById("table");
+        const tRows = table.getElementsByTagName("tr");
+
+        // Loop through each row.
+        Array.from(tRows).forEach(tRow => {
+            // Getting the cells of the email column.
+            const td = tRow.getElementsByTagName("td")[2];
+            if (td) {
+                // Extract the email from the td element.
+                let email = td.textContent || td.innerText;
+                // Display the rows that contain the search term and hide those that don't.
+                if (email.toUpperCase().indexOf(emailSearchTerm) > -1) {
+                    tRow.style.display = "";
+                } else {
+                    tRow.style.display = "none";
+                }
+            }
+        });
+    });
+
+    // Search by user names.
+    const nameSearchInput = document.getElementById("name-search-input");
+    nameSearchInput.addEventListener("keyup", (e) => {
+        let nameSearchTerm = e.target.value.toUpperCase();
+
+        const table = document.getElementById("table");
+        const tRows = table.getElementsByTagName("tr");
+
+        // Loop through each row.
+        Array.from(tRows).forEach(tRow => {
+            // Getting the cells of the name column.
+            const td = tRow.getElementsByTagName("td")[1];
+            if (td) {
+                //// Getting the a element because the names in the table cells are wrapped inside them.
+                const a = td.getElementsByTagName("a")[0];
+                // Extract the name from the a element.
+                let name = a.textContent || a.innerText;
+                // Display the rows that contain the search term and hide those that don't.
+                if (name.toUpperCase().indexOf(nameSearchTerm) > -1) {
+                    tRow.style.display = "";
+                } else {
+                    tRow.style.display = "none";
+                }
+            }
+        });
+    });
+
+    // Filter membership status.
+    const statusFilter = document.getElementById("status-filter");
+    statusFilter.addEventListener("change", (e) => {
+        let statusSelected = e.target.value;
+
+        const table = document.getElementById("table");
+        const tRows = table.getElementsByTagName("tr");
+
+        // Loop through each row.
+        Array.from(tRows).forEach(tRow => {
+            // Getting the cells of the status column.
+            const td = tRow.getElementsByTagName("td")[3];
+            if (td) {
+                let status = td.textContent || td.innerText;
+                // Display the rows that matches the value of the status selected.
+                if (status.indexOf(statusSelected) > -1) {
+                    tRow.style.display = "";
+                } else {
+                    tRow.style.display = "none";
+                }
+            }
+        });
+
+    });
+
+</script>
+

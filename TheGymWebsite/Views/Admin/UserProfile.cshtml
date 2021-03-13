@@ -1,0 +1,171 @@
+﻿@model UserProfileViewModel
+
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+
+<div class="card mb-3">
+    <div class="card-header">
+        User Id : @Model.Id
+    </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            <div class="row offset-xl-1">
+                <div class="col-12 col-sm-12 col-md-7">
+                    <dl class="row p-0 m-0">
+                        <dt class="col-4 col-sm-3" style="min-width:100px; max-width:120px;">Name:</dt>
+                        <dd class="col-8 col-sm-6">@Model.Title @Model.FirstName @Model.LastName</dd>
+                    </dl>
+                    <dl class="row p-0 m-0">
+                        <dt class="col-4 col-sm-3" style="min-width:100px; max-width:120px;">Email:</dt>
+                        <dd class="col-8 col-sm-6">@Model.Email</dd>
+                    </dl>
+                    <dl class="row p-0 m-0">
+                        <dt class="col-4 col-sm-3" style="min-width:100px; max-width:120px;">DoB:</dt>
+                        <dd class="col-8 col-sm-6">@Model.DayOfBirth/@Model.MonthOfBirth/@Model.YearOfBirth</dd>
+                    </dl>
+                    <dl class="row p-0 m-0">
+                        <dt class="col-4 col-sm-3" style="min-width:100px; max-width:120px;">Gender:</dt>
+                        <dd class="col-8 col-sm-6">@Model.Gender</dd>
+                    </dl>
+                    <dl class="row p-0 m-0">
+                        <dt class="col-4 col-sm-3" style="min-width:100px; max-width:120px;">Phone:</dt>
+                        <dd class="col-8 col-sm-6">@Model.PhoneNumber</dd>
+                    </dl>
+                    <dl class="row p-0 m-0">
+                        <dt class="col-4 col-sm-3" style="min-width:100px; max-width:120px;">Address:</dt>
+                        <dd class="col-8 col-sm-6">@Model.AddressLineOne<br />@Model.AddressLineTwo<br />@Model.Town<br />@Model.Postcode</dd>
+                    </dl>
+                </div>
+                <div class="col-12 col-sm-8 col-md-4">
+                    <ul class="list-group">
+                        <li>
+                            <b>Roles:</b>
+                            @if (Model.Roles.Any())
+                            {
+                                @foreach (var role in Model.Roles)
+                                {
+                                    <ul>
+                                        <li class="ml-3">@role</li>
+                                    </ul>
+                                }
+                            }
+                            else
+                            {
+                                <ul>
+                                    <li class="ml-3">No roles.</li>
+                                </ul>
+                            }
+                        </li>
+                    </ul>
+                    <br />
+                    <ul class="list-group">
+                        <li>
+                            <b>Claims:</b>
+                            @if (Model.Claims.Any())
+                            {
+                                @foreach (var claim in Model.Claims)
+                                {
+                                    <ul>
+                                        <li class="ml-3">@claim.ClaimType: @claim.ClaimValue </li>
+                                    </ul>
+                                }
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="row justify-content-center">
+            <div class="col-6 justify-content-around form-inline">
+                @*Cannot edit admin from the system*@
+                @if (Model.Email != "admin@admin.com")
+                {
+                    <div class="col-2 col-md-1">
+                        <a asp-action="UserList" asp-controller="Admin"
+                           class="view" title="Return to users list" data-toggle="tooltip">
+                            <i class="fas fa-arrow-circle-left fa-2x text-success"></i>
+                        </a>
+                    </div>
+                    @* Editing user details is only accessible to users who want to edit their own details and to users with permission to manage other *@
+                    @if (Model.Email == User.Identity.Name || (await AuthorizationService.AuthorizeAsync(User, "ManageUsersPermission")).Succeeded)
+                    {
+                        <div class="col-2 offset-md-1 col-md-1">
+                            <a asp-action="EditUserDetails" asp-controller="Account" asp-route-email="@Model.Email"
+                               asp-route-returnUrl="@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString)"
+                               class="view" title="Edit user details" data-toggle="tooltip">
+                                <i class="fas fa-user-edit fa-2x text-warning"></i>
+                            </a>
+                        </div>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "ManageRolesPermission")).Succeeded)
+                    {
+                        <div class="col-2 col-md-1">
+                            <a asp-action="EditUserRoles" asp-controller="Account" asp-route-id="@Model.Id"
+                               asp-route-returnUrl="@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString)"
+                               class="view" title="Assign roles to user" data-toggle="tooltip">
+                                <i class="fas fa-tags fa-2x text-info"></i>
+                            </a>
+                        </div>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "ManageUsersPermission")).Succeeded)
+                    {
+                        <div class="col-2 col-md-1">
+                            @if (Model.IsEmployee)
+                            {
+                                <form method="post" asp-action="RemoveEmployee" asp-controller="Admin" asp-route-id="@Model.Id"
+                                      asp-route-returnUrl="@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString)">
+                                    <button type="submit" title="Remove user from the emplyee register" data-toggle="tooltip" class="btn">
+                                        <i class="fas fa-user-minus fa-2x text-danger"></i>
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" asp-action="AddEmployee" asp-controller="Admin" asp-route-id="@Model.Id"
+                                      asp-route-returnUrl="@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString)">
+                                    <button type="submit" title="Add user to the emplyee register" data-toggle="tooltip" class="btn">
+                                        <i class="fas fa-user-plus fa-2x text-info"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    }
+                    if ((await AuthorizationService.AuthorizeAsync(User, "IssueBansPermission")).Succeeded)
+                    {
+                        <div class="col-2 col-md-1">
+                            @if (Model.IsBanned)
+                            {
+                                <form method="post" asp-action="RemoveBan" asp-controller="Account" asp-route-id="@Model.Id">
+                                    <button type="submit" title="Remove ban" data-toggle="tooltip" class="btn">
+                                        <i class="fas fa-ban fa-2x text-info"></i>
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" asp-action="BanUser" asp-controller="Account" asp-route-id="@Model.Id">
+                                    <button type="submit" title="Ban User" data-toggle="tooltip" class="btn">
+                                        <i class="fas fa-ban fa-2x text-danger"></i>
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "ManageUsersPermission")).Succeeded)
+                    {
+                        <div class="col-2 col-md-1">
+                            <form method="post" asp-action="DeleteUser" asp-controller="Account" asp-route-id="@Model.Id">
+                                <button type="submit" title="Delete user" data-toggle="tooltip" class="btn">
+                                    <i class="fas fa-trash-alt fa-2x text-danger"></i>
+                                </button>
+                            </form>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿@model MemberViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container-fluid gym-background min-vh-100">
+    <div class="p-4 offset-sm-0 offset-md-1">
+        <p>Hello @Model.FullName</p>
+
+        @if (Model.MembershipStatus == "Active")
+        {
+            <p>Your membership status is: <i class="text-success font-weight-bold">@Model.MembershipStatus</i></p>
+            <p>Your membership will expire on: <i>@Model.MembershipExpiration</i></p>
+        }
+        else
+        {
+            <p>Your membership status is: <i class="text-danger font-weight-bold">@Model.MembershipStatus</i></p>
+            <p>Activate your membership: <a asp-action="Index" asp-controller="Payment" class="btn btn-primary p-0 pl-3 pr-3 m-0 ml-1">here</a></p>
+        }
+
+        <p>View your details: <a asp-action="MemberDetails" asp-controller="Member" class="btn btn-warning p-0 pl-3 pr-3 m-0 ml-1">here</a></p>
+
+        <div class="col-12 col-lg-10 border border-dark" style="min-width:500px; max-width:800px; background-color:white;">
+            <canvas id="attendanceChart" height="30" width="120"></canvas>
+        </div>
+    </div>
+</div>
+<!-- The link to the ChartJS library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+<!-- The Javascript code to render the chart -->
+<script type="text/javascript">
+    const xLabels = [];
+    const yLabels = [];
+    @foreach (var item in Model.Chart)
+    {
+        @: xLabels.push("@item.Key");
+        @: yLabels.push(@item.Value);
+    }
+
+    const ctx = document.getElementById("attendanceChart").getContext("2d");
+    const myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: xLabels,
+            datasets: [{
+                label: "Attendance",
+                data: yLabels,
+                backgroundColor: "#ed1c24",
+                borderColor: "#000",
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    //type: "time"
+                    //distribution: "series"
+                }],
+                yAxes: [{
+                    display: false,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>

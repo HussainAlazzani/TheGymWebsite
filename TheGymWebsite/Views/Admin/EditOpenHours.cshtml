@@ -1,0 +1,117 @@
+﻿@model List<TheGymWebsite.ViewModels.OpenHoursViewModel>
+
+@{
+    ViewData["Title"] = "Edit Opening Hours";
+}
+
+<div class="container">
+    <form method="post" asp-controller="Admin" asp-action="EditOpenHours">
+        <div>
+            <h5 class="font-weight-bold text-center p-4">Edit opening hours:</h5>
+            <table class="table border-bottom">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Day</th>
+                        <th>Opening</th>
+                        <th>Closing</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < 7; i++)
+                    {
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input asp-for="@Model[i].Id" type="hidden" />
+                                <label asp-for="@Model[i].DayName">@Model[i].DayName</label>
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].OpenTime" type="time" class="form-control" value="@Model[i].OpenTime.ToString(@"hh\:mm")" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].CloseTime" type="time" class="form-control" value="@Model[i].CloseTime.ToString(@"hh\:mm")" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].Note" class="form-control note-field" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <h5 class="font-weight-bold text-center p-4">Edit bank holiday opening hours:</h5>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <table class="table border-bottom">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th></th>
+                        <th></th>
+                        <th>Day</th>
+                        <th>Opening</th>
+                        <th>Closing</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 7; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <td style="width:0.1%; white-space:nowrap;">
+                                <select asp-for="@Model[i].Day" class="form-control element-inline" style="width:auto;">
+                                    @for (int j = 1; j <= 31; j++)
+                                    {
+                                        <option>@j</option>
+                                    }
+                                </select>
+                            </td>
+                            <td style="width:0.1%; white-space:nowrap;">
+                                <select asp-for="@Model[i].Month" class="form-control element-inline" style="width:auto;">
+                                    @for (int j = 1; j <= 12; j++)
+                                    {
+                                        <option>@j</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <select asp-for="@Model[i].Year" class="form-control element-inline" style="width:auto;">
+                                    @for (int j = Convert.ToInt32(DateTime.Now.Year); j <= 2100; j++)
+                                    {
+                                        <option>@j</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].Id" type="hidden" />
+                                <label asp-for="@Model[i].DayName">@Model[i].DayName</label>
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].OpenTime" type="time" class="form-control" value="@Model[i].OpenTime.ToString(@"hh\:mm")" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].CloseTime" type="time" class="form-control" value="@Model[i].CloseTime.ToString(@"hh\:mm")" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].Note" class="form-control note-field" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div>
+            <div class="form-inline col-12 col-lg-10 m-0 p-0 mt-3 mb-3 justify-content-around">
+                <button type="submit" class="btn btn-warning btn-submit">Submit changes</button>
+                <a asp-action="OpenHours" asp-controller="Home" class="btn btn-dark btn-cancel">Cancel</a>
+            </div>
+        </div>
+    </form>
+    <br />
+    <br />
+    <br />
+</div>
+

@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Vacancy>
+
+@using Microsoft.AspNetCore.Authorization;
+@inject IAuthorizationService authorizationService;
+
+@{
+    ViewData["Title"] = "Vacancies";
+}
+<div class="container-fluid gym-background min-vh-100">
+    <div class="p-3">
+        <div class="row">
+            <h3>Current vacancies</h3>
+        </div>
+        @if ((await authorizationService.AuthorizeAsync(User, "ManageBusinessPermission")).Succeeded)
+        {
+            <br />
+            <div class="row p-3">
+                <a class="btn btn-success btn-submit" asp-controller="Admin" asp-action="AddVacancy">&#43; Add new Vacancy</a>
+            </div>
+            <br />
+        }
+
+        @if (Model.Any() == false)
+        {
+            <div class="row">
+                <h6>There are no vacancies</h6>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in @Model)
+            {
+                <dl>
+                    <dt>Job title:</dt>
+                    <dd>@item.JobTitle</dd>
+                    <dt>Job type:</dt>
+                    <dd>@Enums.GetDisplayName(item.JobType)</dd>
+                    <dt>Contract:</dt>
+                    <dd>@item.JobPeriod</dd>
+                    <dt>Salary:</dt>
+                    <dd>@item.Salary.ToString("C") @Enums.GetDisplayName(item.PayInterval)</dd>
+
+
+                    @if (@item.Description != null)
+                    {
+                        <dt>Description:</dt>
+                        <dd>@item.Description</dd>
+
+                    }
+                </dl>
+                @if ((await authorizationService.AuthorizeAsync(User, "ManageBusinessPermission")).Succeeded)
+                {
+
+                    <form method="post" asp-controller="Admin" asp-action="DeleteVacancy" asp-route-id="@item.Id">
+                        <div class="form-inline justify-content-between col-12 col-sm-10 col-md-8 col-lg-6 p-0 m-0">
+                            <a class="btn btn-warning btn-submit" asp-controller="Admin" asp-action="EditVacancy" asp-route-id="@item.Id">Edit this vacancy</a>
+                            <button type="submit" class="btn btn-danger btn-cancel"
+                                    onclick="return confirm('Are you sure you want to delete this vacancy?')">
+                                &#8722; Delete this vacancy
+                            </button>
+                        </div>
+                    </form>
+
+                }
+                <hr style="border:2px solid white; width:75%;" />
+                <br />
+            }
+        }
+
+    </div>
+</div>

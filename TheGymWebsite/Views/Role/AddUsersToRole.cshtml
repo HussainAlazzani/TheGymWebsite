@@ -1,0 +1,36 @@
+﻿@model List<AddUsersToRoleViewModel>
+
+@{
+    ViewData["Title"] = "Add users to role";
+}
+
+@if (Model.Any())
+{
+    <form asp-controller="Role" asp-action="AddUsersToRole" asp-route-roleName="@ViewBag.roleName" method="post">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="font-weight-bold">@ViewBag.roleName</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="pb-3">Select users to add to this role:</h5>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <div class="form-check m-1">
+                        <input type="hidden" asp-for="@Model[i].UserId" />
+                        <input asp-for="@Model[i].IsChecked" class="form-check-input" />
+                        <label class="form-check-label" asp-for="@Model[i].IsChecked">@Model[i].UserName, @Model[i].UserEmail</label>
+                    </div>
+                }
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+            <div class="card-footer">
+                <input type="submit" value="&#43; Add Users" class="btn btn-outline-success" style="width:auto" />
+                <a asp-action="ListRoles" class="btn btn-outline-dark" style="width:auto">Cancel</a>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <h3>No users to add</h3>
+}

@@ -1,0 +1,29 @@
+﻿@model RoleViewModel
+
+
+
+<div class="container">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <form asp-action="CreateRole" asp-controller="Role" method="post">
+        <div class="form-group">
+            <label asp-for="@Model.Name"></label>
+            <input asp-for="@Model.Name" class="form-control" placeholder="Input name for role..." />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>
+        <div>
+            <p>Select claims for this role:</p>
+        </div>
+        @for (int i = 0; i < Model.RoleClaims.Count; i++)
+        {
+            <div class="form-check-label">
+                <input asp-for="@Model.RoleClaims[i].ClaimType" type="hidden" />
+                <input asp-for="@Model.RoleClaims[i].ClaimValue" class="form-check-input" />
+                <label asp-for="@Model.RoleClaims[i].ClaimValue" class="form-check-label">@Model.RoleClaims[i].ClaimType</label>
+            </div>
+        }
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <br />
+        <button class="btn btn-outline-success" type="submit">&#43; Create</button>
+        <a asp-action="ListRoles" asp-controller="Role" class="btn btn-outline-dark">Cancel</a>
+    </form>
+</div>

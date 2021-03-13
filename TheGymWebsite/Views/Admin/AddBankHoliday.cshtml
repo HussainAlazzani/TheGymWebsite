@@ -1,0 +1,70 @@
+﻿@model TheGymWebsite.ViewModels.OpenHoursViewModel
+
+@{
+    ViewData["Title"] = "Add Bank Holiday";
+}
+
+<div class="container p-3">
+    <form method="post" asp-action="AddBankHoliday" asp-controller="Admin">
+        <div class="form-group row col-12 col-sm-6 col-md-3 flex-column m-0 p-0 pt-3">
+            <div>
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-row pb-0 mb-0">
+                <label asp-for="Date"></label>
+            </div>
+            <div class="form-row pt-0 mt-0">
+                <div class="col-4">
+                    <select asp-for="Day" class="form-control">
+                        <option value="">Day</option>
+                        @for (int i = 1; i <= 31; i++)
+                        {
+                            <option>@i</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-4">
+                    <select asp-for="Month" class="form-control">
+                        <option value="">Month</option>
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                            <option>@i</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-4">
+                    <select asp-for="Year" class="form-control">
+                        <option value="">Year</option>
+                        @for (int i = Convert.ToInt32(DateTime.Now.Year); i <= 2100; i++)
+                        {
+                            <option>@i</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group row col-12 col-sm-6 col-md-3 p-0 m-0">
+            <label asp-for="OpenTime"></label>
+            <input asp-for="OpenTime" type="time" class="form-control" />
+            <span asp-validation-for="OpenTime" class="text-danger"></span>
+        </div>
+        <div class="form-group row col-12 col-sm-6 col-md-3  p-0 m-0">
+            <label asp-for="CloseTime"></label>
+            <input asp-for="CloseTime" type="time" class="form-control" />
+            <span asp-validation-for="CloseTime" class="text-danger"></span>
+        </div>
+
+        <div class="form-group row col-12 col-lg-10  p-0 m-0">
+            <label asp-for="Note"></label>
+            <input asp-for="Note" class="form-control" />
+            <span asp-validation-for="Note" class="text-danger"></span>
+        </div>
+        <div class="form-inline col-12 col-lg-10 m-0 p-0 mt-3 mb-3 justify-content-between">
+            <button type="submit" class="btn btn-outline-success btn-submit">&#43; Add holiday</button>
+            <a asp-action="OpenHours" asp-controller="Home" class="btn btn-dark btn-cancel">Cancel</a>
+        </div>
+    </form>
+    <br />
+    <br />
+</div>
